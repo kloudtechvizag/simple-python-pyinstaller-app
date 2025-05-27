@@ -48,6 +48,16 @@ pipeline {
 
             }
         }
+
+        stage('CheckQualityGage'){
+
+            steps {
+
+                timeout(time: 60, unit: 'SECONDS') {
+                    waitForQualityGate  abortPipeline: true
+                }
+            }
+        }
         // stage('Deliver') { 
         //     steps {
         //         sh "pyinstaller --onefile sources/add2vals.py" 
