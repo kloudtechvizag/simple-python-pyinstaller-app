@@ -49,7 +49,7 @@ pipeline {
             }
         }
 
-        stage('CheckQualityGage'){
+        stage('CheckQualityGate'){
 
             steps {
 
@@ -58,15 +58,37 @@ pipeline {
                 }
             }
         }
-        // stage('Deliver') { 
-        //     steps {
-        //         sh "pyinstaller --onefile sources/add2vals.py" 
-        //     }
-        //     post {
-        //         success {
-        //             archiveArtifacts 'dist/add2vals' 
-        //         }
-        //     }
-        // }
+
+        stage('UploadArtifacts') {
+            steps {
+                script {
+                    // Archive the Python source code into a tar.gz file
+                    def artifactFile = "python-app-${BUILD_NUMBER}.tar.gz"
+                    sh "tar -czf ${artifactFile} sources/*.py"
+
+                    // Upload to Nexus
+                    nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        nexusUrl: 'nexus:8081',
+                        groupId: 'com.example',
+                        version: BUILD_NUMBER,
+                        repository: 'RepositoryName',
+                        credentialsId: 'nexus-creds',
+                        artifacts: [
+                            [
+                                artifactId: 'python-app',
+                                classifier: '',
+                                file: artifactFile,
+                                type: 'tar.gz'
+                            ]
+                        ]
+                    )
+                }
+            }
+        }
+
+
+        
     }
 }
