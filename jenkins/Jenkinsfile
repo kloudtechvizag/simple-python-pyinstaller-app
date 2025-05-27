@@ -73,7 +73,7 @@ pipeline {
                         nexusUrl: 'nexus:8081',
                         groupId: 'com.example',
                         version: BUILD_NUMBER,
-                        repository: 'RepositoryName',
+                        repository: 'python-app',
                         credentialsId: 'nexus-creds',
                         artifacts: [
                             [
