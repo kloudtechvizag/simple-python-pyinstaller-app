@@ -100,7 +100,7 @@ pipeline {
                         def credentialsId = 'nexus-creds'
 
                         // Compress project source
-                        sh "tar -czf ${artifactFile} src/*.py"
+                        sh "tar -czf ${artifactFile} sources/*.py"
 
                         // Get credentials from Jenkins (username and password)
                         withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
